@@ -7,11 +7,23 @@ const bodyparser = require('body-parser');
 
 const app = express();
 app.use(bodyparser.json());
-
 app.use(express.json());
 app.use(cors());
 app.use("/api", routes);
 
+
+app.post('/api/login', (req, res) => {
+  const { name, password } = req.body;
+
+  const adminUsername = process.env.ADMIN_USERNAME;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (name === adminUsername && password === adminPassword) {
+    res.status(200).send({ authenticated: true });
+  } else {
+    res.status(401).send({ authenticated: false });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 
